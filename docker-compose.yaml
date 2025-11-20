@@ -1,0 +1,9 @@
+services:
+  ch4ts3c:
+    # image: jordanchesley/ch4ts3c:latest
+    # image: ch4ts3c:latest
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
