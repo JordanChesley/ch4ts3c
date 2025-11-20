@@ -26,15 +26,15 @@ export default function RegisterForm() {
     }
 
     return (
-        <form onSubmit={onRegister} className="w-60/100 align-center border-1 border-white rounded-lg p-3 flex flex-col">
-            <h1>Register</h1>
+        <form onSubmit={onRegister} className="w-40/100 align-center border-1 border-white rounded-lg py-3 px-6 flex flex-col">
+            <h1 className="text-xl text-center my-4">Register</h1>
             <label htmlFor="username">Username</label>
             <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
             <label htmlFor="email">Email</label>
             <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <label htmlFor="password">Password</label>
             <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button type="submit" className="p-3">Register</button>
+            <button type="submit" className="p-3 cursor-pointer">Register</button>
         </form>
     )
 }
