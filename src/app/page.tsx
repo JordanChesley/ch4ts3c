@@ -1,3 +1,4 @@
+import AdminPanel from "@/components/AdminPanel";
 import Chatroom from "@/components/Chatroom";
 import LoginForm from "@/components/LoginForm";
 import RegisterForm from "@/components/RegisterForm";
@@ -12,6 +13,9 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen flex flex-col gap-6">
       <h1 className="m-4 text-center text-4xl">CH4TS3C</h1>
+      {
+        (user?.id === 'gRjN2LzZv55lITm1iqnsgl5WLMf0SDm4') && <AdminPanel />
+      }
       {
         !user && (
           <div className="flex flex-col justify-center items-center gap-4">

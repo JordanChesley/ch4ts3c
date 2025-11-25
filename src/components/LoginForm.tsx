@@ -14,12 +14,11 @@ export default function LoginForm() {
         e.preventDefault()
         setLoading(true)
         setError('')
-        let {data, error} = await authClient.signIn.email({
-            email: useremail,
+        let {data, error} = await authClient.signIn.username({
+            username: useremail,
             password
         })
         if (data) {
-            console.log(data.user)
             redirect('/')
         } else if (error) {
             setError(error.message + '.' || 'An error occurrsed. Please try again.')
@@ -32,7 +31,7 @@ export default function LoginForm() {
     return (
         <form onSubmit={onLogin} className="w-40/100 align-center border-1 border-white rounded-lg py-3 px-6 flex flex-col">
             <h1 className="text-xl text-center my-4">LogIn</h1>
-            <label htmlFor="useremail">UseRNaMe / EmaIL</label>
+            <label htmlFor="useremail">UseRNaMe</label>
             <input type="text" name="useremail" value={useremail} onChange={(e) => setUserEmail(e.target.value)} className="border-b-1 border-white outline-none" />
             <label htmlFor="password">PasSwoRD</label>
             <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="border-b-1 border-white outline-none" />

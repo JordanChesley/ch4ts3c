@@ -22,7 +22,7 @@ const messages: Message[] = []
 // Decent word filter.
 const filter = new Filter()
 filter.addWords('nig', 'rape', 'raper', 'rapist')
-filter.removeWords('damn', 'hell')
+filter.removeWords('damn', 'hell', 'balls')
 
 // IO Handler.
 app.prepare().then(() => {
@@ -43,6 +43,7 @@ app.prepare().then(() => {
 
     // Broadcast updated user list.
     io.emit('list-users', {users})
+    io.emit('admin-count-messages', {messages: messages.length})
 
     // Send all previous messages to new user.
     for (let message of messages) {
@@ -64,6 +65,18 @@ app.prepare().then(() => {
       messages.push({user: socket.data.username, content: filter.clean(data.content)})
       console.log(`${socket.data.username}: ${filter.clean(data.content)}`)
       io.emit('new-message', {user: socket.data.username, content: filter.clean(data.content)})
+      io.emit('admin-count-messages', {messages: messages.length})
+    })
+
+    // Disconnect users from admin panel.
+    socket.on('admin-disconnect-user', async (data) => {
+      console.log(`Disconnecting ${data.username}`)
+      let sockets = await io.fetchSockets()
+      for (let s of sockets) {
+        if (s.data.username == data.username) {
+          return s.disconnect(true)
+        }
+      }
     })
   })
 

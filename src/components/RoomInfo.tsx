@@ -35,10 +35,15 @@ export default function RoomInfo({user}:{user:any}) {
     return (
         <div className="w-15/100 h-100">
             {/* User List */}
-            <div className="h-72/100 border-2 rounded-lg p-2">
+            <div className="h-72/100 border-2 rounded-lg p-2 flex flex-col gap-1">
             {
                 users.map((username, index) => (
-                    <p key={index}>{username}</p>
+                    <div key={index} className="flex flex-row justify-between align-center">
+                        <p>{username}</p>
+                        {(user?.id === 'gRjN2LzZv55lITm1iqnsgl5WLMf0SDm4') && (
+                            <button onClick={() => socket.emit('admin-disconnect-user', {username})} className="rounded-lg bg-red-300 text-white hover:cursor-pointer px-2 py-1 self-end">Disconnect</button>
+                        )}
+                    </div>
                 ))
             }
             </div>

@@ -13,6 +13,12 @@ export const auth = betterAuth({
   trustedOrigins: [
     // 
   ],
+  advanced: {
+    defaultCookieAttributes: {
+      httpOnly: false,
+      secure: false,
+    }
+  },
   plugins: [
     username(),
   ]

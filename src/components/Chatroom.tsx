@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import UserMessage from "./UserMessage";
 import { authClient } from "@/lib/auth-client";
 import { catgirlSystem, cryptoCrash } from "@/lib/Fonts";
+import { redirect } from "next/navigation";
 
 interface Message {
     user: string;
@@ -27,8 +28,14 @@ export default function Chatroom({user}:{user: any}) {
 
     const chatContainerRef = useRef<HTMLDivElement>(null)
 
+    async function onDisconnect(reason: string) {
+        if (reason === 'io server disconnect') {
+            await authClient.signOut()
+            redirect('/')
+        }
+    }
+
     function onMessage(data: {user: string; content: string}) {
-        console.log(`New Message: ${data.content}`)
         setMessages(old => [...old, data])
     }
 
@@ -46,14 +53,14 @@ export default function Chatroom({user}:{user: any}) {
     useEffect(() => {
         if (socket.connected) {
             setConnected(true)
-            console.log('CLIENT: Socket Connected!')
-            console.log(`Using ${socket.io.engine.transport.name}`)
         } else {
             console.log('CLIENT: Socket disconnected!')
         }
         socket.on('new-message', onMessage)
+        socket.on('disconnect', onDisconnect)
         return () => {
             socket.off('new-message', onMessage)
+            socket.off('disconnect', onDisconnect)
         }
     }, [socket])
 
