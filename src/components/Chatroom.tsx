@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import UserMessage from "./UserMessage";
 import { authClient } from "@/lib/auth-client";
 import { catgirlSystem, cryptoCrash } from "@/lib/Fonts";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 interface Message {
     user: string;
@@ -13,17 +13,10 @@ interface Message {
 }
 
 export default function Chatroom({user}:{user: any}) {
-    const [connected, setConnected] = useState(false)
-    const [forbiddenLanguage, setForbiddenLanguage] = useState(localStorage.getItem('forbiddenLanguage'))
+    const router = useRouter()
+    const [forbiddenLanguage, setForbiddenLanguage] = useState<string|null>(null)
     const [message, setMessage] = useState('')
-    const [messages, setMessages] = useState<Message[]>([
-        // {user: 'Anooki', content: 'THIS IS A NEW SENTENCE WRITTEN IN ALL CAPS THAT\'S DESIGNED TO REALLY FUCK WITH PEOPLE!'},
-        // {user: 'zeanooki', content: 'Hi'},
-        // {user: 'Dom', content: 'wassup'},
-        // {user: 'Dom', content: 'Fire emoji'},
-        // {user: 'Harry G', content: 'Don\'t even trip dawg'},
-        // {user: 'zeanooki', content: 'This is a test of the national emergency alert system. This is a test of the national emergency alert system.'},
-    ])
+    const [messages, setMessages] = useState<Message[]>([])
     const [loading, setLoading] = useState(false)
 
     const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -31,7 +24,8 @@ export default function Chatroom({user}:{user: any}) {
     async function onDisconnect(reason: string) {
         if (reason === 'io server disconnect') {
             await authClient.signOut()
-            redirect('/')
+            // redirect('/')
+            router.refresh()
         }
     }
 
@@ -51,10 +45,8 @@ export default function Chatroom({user}:{user: any}) {
     }
 
     useEffect(() => {
-        if (socket.connected) {
-            setConnected(true)
-        } else {
-            console.log('CLIENT: Socket disconnected!')
+        if (typeof window !== 'undefined') {
+            setForbiddenLanguage(localStorage.getItem('forbiddenLanguage'))
         }
         socket.on('new-message', onMessage)
         socket.on('disconnect', onDisconnect)

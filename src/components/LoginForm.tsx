@@ -1,10 +1,11 @@
 'use client'
 
 import { authClient } from "@/lib/auth-client"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function LoginForm() {
+    const router = useRouter()
     const [useremail, setUserEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -19,7 +20,8 @@ export default function LoginForm() {
             password
         })
         if (data) {
-            redirect('/')
+            router.refresh()
+            
         } else if (error) {
             setError(error.message + '.' || 'An error occurrsed. Please try again.')
         } else {

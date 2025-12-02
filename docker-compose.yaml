@@ -3,6 +3,7 @@ services:
     # image: jordanchesley/ch4ts3c:latest
     # image: ch4ts3c:latest
     build: .
+    restart: unless-stopped
     ports:
       - "3000:3000"
     env_file:

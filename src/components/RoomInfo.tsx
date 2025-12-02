@@ -2,10 +2,11 @@
 
 import { authClient } from "@/lib/auth-client"
 import { socket } from "@/lib/socket-client"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function RoomInfo({user}:{user:any}) {
+    const router = useRouter()
     const [users, setUsers] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
 
@@ -17,17 +18,13 @@ export default function RoomInfo({user}:{user:any}) {
         setLoading(true)
         socket.disconnect()
         await authClient.signOut()
-        redirect('/')
+        router.refresh()
     }
 
     useEffect(() => {
-        // socket.on('user-joined', onUserJoined)
-        // socket.on('user-left', onUserLeft)
         socket.on('list-users', onListUsers)
 
         return () => {
-            // socket.off('user-joined', onUserJoined)
-            // socket.off('user-left', onUserLeft)
             socket.off('list-users', onListUsers)
         }
     }, [])
@@ -40,7 +37,7 @@ export default function RoomInfo({user}:{user:any}) {
                 users.map((username, index) => (
                     <div key={index} className="flex flex-row justify-between align-center">
                         <p>{username}</p>
-                        {(user?.id === 'gRjN2LzZv55lITm1iqnsgl5WLMf0SDm4') && (
+                        {(user?.id === 'NaCcUTnUPzFpdwa7VMUJOoFloMkm7Ksg') && (
                             <button onClick={() => socket.emit('admin-disconnect-user', {username})} className="rounded-lg bg-red-300 text-white hover:cursor-pointer px-2 py-1 self-end">Disconnect</button>
                         )}
                     </div>

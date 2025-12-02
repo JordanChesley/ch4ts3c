@@ -3,18 +3,22 @@ import Chatroom from "@/components/Chatroom";
 import LoginForm from "@/components/LoginForm";
 import RegisterForm from "@/components/RegisterForm";
 import RoomInfo from "@/components/RoomInfo";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { authClient } from "@/lib/auth-client";
 
 export default async function HomePage() {
-  const user = (await auth.api.getSession({
-    headers: await headers()
-  }))?.user
+  const { data, error } = await authClient.getSession()
+  if (data) {
+    console.log(data.user)
+  } else if (error) {
+    console.log(`Error: ${error.message}`)
+  }
+  const user = data?.user
+
   return (
     <div className="min-h-screen flex flex-col gap-6">
       <h1 className="m-4 text-center text-4xl">CH4TS3C</h1>
       {
-        (user?.id === 'gRjN2LzZv55lITm1iqnsgl5WLMf0SDm4') && <AdminPanel />
+        (user?.id === 'NaCcUTnUPzFpdwa7VMUJOoFloMkm7Ksg') && <AdminPanel />
       }
       {
         !user && (
