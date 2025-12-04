@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import UserMessage from "./UserMessage";
 import { authClient } from "@/lib/auth-client";
 import { catgirlSystem, cryptoCrash } from "@/lib/Fonts";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface Message {
     user: string;
@@ -24,7 +24,6 @@ export default function Chatroom({user}:{user: any}) {
     async function onDisconnect(reason: string) {
         if (reason === 'io server disconnect') {
             await authClient.signOut()
-            // redirect('/')
             router.refresh()
         }
     }

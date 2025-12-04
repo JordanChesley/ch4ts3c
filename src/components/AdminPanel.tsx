@@ -12,12 +12,10 @@ export default function AdminPanel() {
   }
 
   function onMessageCount(data: {messages: string}) {
-    console.log(`# Messages: ${data.messages}`)
     setNumMessages(parseInt(data.messages))
   }
 
   function disconnectUser(username: string) {
-    console.log(`Disconnecting ${username}`)
     socket.emit('admin-disconnect-user', {username})
   }
 
